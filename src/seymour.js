@@ -128,7 +128,34 @@ function run(args, env) {
                                   .toLowerCase();
             config.setPlatformPreference(name, platform, env[envName]);
         });
+        
+    var needUpdatePlugins = new Map();
+    Object.keys(env)
+        .filter(function(v) {
+            console.log(v);
+            return v.match(/^SEY_PLUGIN_/);
+        })
+        .forEach(function(envName) {
+            var name = envName.match(/^SEY_PLUGIN_([A-Za-z\-]+)/, '')[1];
+            var variable = envName.match(/^SEY_PLUGIN_[A-Za-z\-]+_(\S*)$/)[1];
+            var plugin = config.getPlugin(name);
 
+            if (plugin) {
+                if (!needUpdatePlugins.has(name)) {
+                    needUpdatePlugins.set(name, plugin);
+                }
+
+                needUpdatePlugins.get(name).variables[variable] = env[envName];
+                console.log(needUpdatePlugins.get(name).variables);
+            }
+        });
+
+        needUpdatePlugins.forEach(function(value, key) {
+            config.removePlugin(key);
+            var { name, spec, variables } = value;
+            config.addPlugin({ name, spec}, variables);
+        });
+        
     config.write();
 
     if (args.indexOf('--config-only') !== -1) {

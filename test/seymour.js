@@ -24,6 +24,7 @@ try {
 } catch (e) { }
 
 var seymour       = require('../src/seymour');
+// const { debug } = require('console');
 var cordova       = require('cordova-lib').cordova;
 var ConfigParser  = require('cordova-common').ConfigParser;
 var CordovaLogger = require('cordova-common').CordovaLogger;
@@ -346,7 +347,6 @@ test('Platform Preferences', function(t) {
     });
 });
 
-
 test('config-only mode', function(t) {
     prepareStub.reset();
     compileStub.reset();
@@ -361,6 +361,31 @@ test('config-only mode', function(t) {
 
         setID.restore();
 
+        t.end();
+    });
+});
+
+test('specific-config', function(t) {
+    readFileStub.restore();
+    seymour(['--config-only']
+    , {
+        "SEY_PLUGIN_cordova-plugin-aliyun-push_APP_KEY": "28226864",
+        "SEY_PLUGIN_cordova-plugin-aliyun-push_APP_SECRET": "786472d6c16ef57aa55bed4c301b8431",
+        "SEY_PLUGIN_cordova-plugin-aliyun-push_MIID": "2882303761518300916",
+        "SEY_PLUGIN_cordova-plugin-aliyun-push_MIKEY": "5441830046916",
+        "SEY_PLUGIN_cordova-plugin-aliyun-push_GCMSENDID": " ",
+        "SEY_PLUGIN_cordova-plugin-aliyun-push_GCMAPPID": " ",
+        "SEY_PLUGIN_cordova-plugin-aliyun-push_GCMAPPIDXXX": " "
+    }).then(function() {
+        var config = new ConfigParser(config_path);
+        t.isEqual(config.getPlugin('cordova-plugin-aliyun-push').spec, '1.2.0');
+        t.ok(config.getPlugin('cordova-plugin-aliyun-push').variables.APP_KEY);
+        t.isEqual(config.getPlugin('cordova-plugin-aliyun-push').variables.APP_SECRET, '786472d6c16ef57aa55bed4c301b8431');
+        t.isEqual(config.getPlugin('cordova-plugin-aliyun-push').variables.MIID, '2882303761518300916');
+        t.isEqual(config.getPlugin('cordova-plugin-aliyun-push').variables.MIKEY, '5441830046916');
+        t.isEqual(config.getPlugin('cordova-plugin-aliyun-push').variables.GCMSENDID, ' ');
+        t.isEqual(config.getPlugin('cordova-plugin-aliyun-push').variables.GCMAPPID, ' ');
+        t.doesNotHave(config.getPlugin('cordova-plugin-aliyun-push').variables.GCMAPPIDXXX);
         t.end();
     });
 });
