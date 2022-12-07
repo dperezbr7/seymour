@@ -128,7 +128,7 @@ function run(args, env) {
                                   .toLowerCase();
             config.setPlatformPreference(name, platform, env[envName]);
         });
-        
+
     var needUpdatePlugins = new Map();
     Object.keys(env)
         .filter(function(v) {
@@ -155,12 +155,16 @@ function run(args, env) {
             var { name, spec, variables } = value;
             config.addPlugin({ name, spec}, variables);
         });
-        
+
     config.write();
 
     if (args.indexOf('--config-only') !== -1) {
         // Exit without building if we've been asked to only update the config
         return Promise.resolve();
+    }
+
+    if (env.SEY_AND_PACKAGETYPE && env.SEY_AND_PACKAGETYPE == 'apk') { //cordova 11.x default to aab
+        opts.options.argv=["--packageType=apk"];
     }
 
 

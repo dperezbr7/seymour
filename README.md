@@ -100,6 +100,13 @@ This will override the application identifier defined in config.xml.
 
 This will override the application version defined in config.xml.
 
+### SEY_AND_PACKAGETYPE
+
+This will override the application packageType for Android. Cordova 11.x defaults to aab.
+
+* **Valid options:** `apk`, `aab`
+* **Default value:** `aab`
+
 ### SEY_VERBOSE
 
 This will enable verbose logging from the Cordova build commands.
