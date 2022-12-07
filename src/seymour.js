@@ -132,10 +132,10 @@ function run(args, env) {
     var needUpdatePlugins = new Map();
     Object.keys(env)
         .filter(function(v) {
-            console.log(v);
             return v.match(/^SEY_PLUGIN_/);
         })
         .forEach(function(envName) {
+            console.log(v);
             var name = envName.match(/^SEY_PLUGIN_([A-Za-z\-]+)/, '')[1];
             var variable = envName.match(/^SEY_PLUGIN_[A-Za-z\-]+_(\S*)$/)[1];
             var plugin = config.getPlugin(name);

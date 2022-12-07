@@ -27,6 +27,7 @@
   "dependencies": {
     "cordova-common": "^4.0.2",
     "cordova-lib": "^10.0.0",
+    "dotenv": "^16.0.3",
     "elementtree": "^0.1.7",
     "loud-rejection": "^2.2.0"
   },

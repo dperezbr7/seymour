@@ -16,6 +16,7 @@
  */
 
 require('loud-rejection/register');
+require('dotenv').config();
 
 var events  = require('cordova-common').events;
 var util    = require('util');
